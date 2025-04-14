@@ -6,7 +6,6 @@ import os
 import re
 from dash import Dash, dcc, html, Input, Output
 import yagmail
-pip freeze > requirements.txt
 # === CONFIGURATION ===
 FOLDER_PATH = r'D:\Trading Statistics\automatic data'
 OUTPUT_FILE = 'merged_stock_data.csv'
