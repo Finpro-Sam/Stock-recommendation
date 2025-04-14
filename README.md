@@ -1,4 +1,3 @@
-# Stock-recommendation
 import pandas as pd
 import plotly.graph_objs as go
 import glob
@@ -6,9 +5,10 @@ import os
 import re
 from dash import Dash, dcc, html, Input, Output
 import yagmail
+
 # === CONFIGURATION ===
-FOLDER_PATH = r'D:\Trading Statistics\automatic data'
-OUTPUT_FILE = 'merged_stock_data.csv'
+FOLDER_PATH = r'/data'  # Change to Render's persistent storage folder
+OUTPUT_FILE = '/data/merged_stock_data.csv'
 
 # === STEP 1: Load and Merge Data ===
 csv_files = glob.glob(os.path.join(FOLDER_PATH, '*.csv'))
@@ -23,7 +23,7 @@ for file in csv_files:
             continue
 
         raw_date = match.group(1)
-        date = f"{raw_date[:4]}-{raw_date[4:6]}-{raw_date[6:]}"  # e.g. 2025-03-25
+        date = f"{raw_date[:4]}-{raw_date[4:6]}-{raw_date[6:]}"  # e.g., 2025-03-25
 
         df = pd.read_csv(file)
 
@@ -123,7 +123,7 @@ def get_buzzing_stocks():
 app = Dash(__name__)
 
 app.layout = html.Div([
-    html.H2("\ud83d\udcca Stock Price Visualizer (Web Mode)", style={'color': 'white'}),
+    html.H2("📊 Stock Price Visualizer (Web Mode)", style={'color': 'white'}),
 
     dcc.Dropdown(
         id='stock-dropdown',
@@ -203,7 +203,7 @@ def send_email(n_clicks, email_str):
     """
 
     try:
-        yag = yagmail.SMTP(user='your_email@gmail.com', password='your_app_password')
+        yag = yagmail.SMTP(user=os.getenv('EMAIL_USER'), password=os.getenv('EMAIL_PASSWORD'))
         yag.send(to=email_list, subject="📈 Stock Alert Summary", contents=content)
         return f"Email sent to {', '.join(email_list)}"
     except Exception as e:
@@ -211,6 +211,4 @@ def send_email(n_clicks, email_str):
 
 # === RUN ===
 if __name__ == "__main__":
-    app.run(debug=True, use_reloader=False)
-
-This will help to get the buzzing stocks
+    app.run(host='0.0.0.0', port=8080, debug=False)
