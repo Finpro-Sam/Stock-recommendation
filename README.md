@@ -120,7 +120,7 @@ def get_buzzing_stocks():
     return unique_symbols
 
 # === STEP 5: Dash Server App ===
-app = Dash(__name__)
+app = Dash(__app__)
 
 app.layout = html.Div([
     html.H2("\ud83d\udcca Stock Price Visualizer (Web Mode)", style={'color': 'white'}),
